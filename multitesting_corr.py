@@ -1,4 +1,3 @@
-
 """ Implement methods that adjust p-values to account for multiple comparisons.
 """
 
@@ -23,12 +22,14 @@ def p_multitest(pvals, method='holm', alpha=0.05):
     if method == 'holm':
         return holm_correct(pvals, alpha)
     elif method == 'bonferroni':
-        return bonferroni_correct(pvals, alpha)
+        return bonferroni_correct(pvals)
     else:
         raise ValueError(f"Unknown method {method}, must be one of {','.join(supported_methods)}")
 
 def holm_correct(pvals, alpha=0.05):
     """Implementation of Holm-Bonferroni correction.
+    References:
+    [1] http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture10.pdf
     """
     pvals_sorted = np.sort(pvals)
     pvals_adjust = np.empty(shape=len(pvals))
@@ -51,7 +52,10 @@ def holm_correct(pvals, alpha=0.05):
                 
     return p_map
 
-def bonferroni_correct(pvals, alpha):
+def bonferroni_correct(pvals):
+    """Assumes equal alocation of test size alpha.
+    [1] http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture10.pdf
+    """
     n = len(pvals)
     pvals_adjust = {pvalue_old: min(pvalue_old * n, 1) for pvalue_old in pvals}
     return pvals_adjust
