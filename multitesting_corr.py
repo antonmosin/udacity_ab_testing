@@ -29,7 +29,7 @@ def p_multitest(pvals, method='holm', alpha=0.05):
 def holm_correct(pvals, alpha=0.05):
     """Implementation of Holm-Bonferroni correction.
     References:
-    [1] http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture10.pdf
+    [1] http://www-stat.wharton.upenn.edu/~steele/Courses/956/ResourceDetails/MultipleComparision/Writght92.pdf
     """
     pvals_sorted = np.sort(pvals)
     pvals_adjust = np.empty(shape=len(pvals))
@@ -54,7 +54,7 @@ def holm_correct(pvals, alpha=0.05):
 
 def bonferroni_correct(pvals):
     """Assumes equal alocation of test size alpha.
-    [1] http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture10.pdf
+    [1] http://www-stat.wharton.upenn.edu/~steele/Courses/956/ResourceDetails/MultipleComparision/Writght92.pdf
     """
     n = len(pvals)
     pvals_adjust = {pvalue_old: min(pvalue_old * n, 1) for pvalue_old in pvals}
