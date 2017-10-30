@@ -3,15 +3,13 @@
 
 import numpy as np
 
-def p_multitest(pvals, method='holm', alpha=0.05):
-    """Remedy multiple comparison problem by controlling
-    familywise error rate to be LEQ <alpha>.
+def p_multitest(pvals, method='holm'):
+    """Adjust p-values to account for multiple comparison.
     
     Parameters
     ----------
     pvals: np.array of floats, p-values to adjust
     method: str, method to use
-    alpha: float, desired probability of Type-I error
     
     Returns
     ----------
@@ -20,13 +18,13 @@ def p_multitest(pvals, method='holm', alpha=0.05):
     supported_methods = ('holm', 'bonferroni')
     
     if method == 'holm':
-        return holm_correct(pvals, alpha)
+        return holm_correct(pvals)
     elif method == 'bonferroni':
         return bonferroni_correct(pvals)
     else:
         raise ValueError(f"Unknown method {method}, must be one of {','.join(supported_methods)}")
 
-def holm_correct(pvals, alpha=0.05):
+def holm_correct(pvals):
     """Implementation of Holm-Bonferroni correction.
     References:
     [1] http://www-stat.wharton.upenn.edu/~steele/Courses/956/ResourceDetails/MultipleComparision/Writght92.pdf
@@ -36,7 +34,6 @@ def holm_correct(pvals, alpha=0.05):
     m = len(pvals)
 
     for k in range(m):
-        alpha_adjusted = alpha / (m + 1 - (k + 1))
         pvals_adjust[k] = min(pvals_sorted[k] * (m + 1 - (k + 1)), 1)
     
     # ensure that highest adjusted p-value is chosen for duplcate p-values
