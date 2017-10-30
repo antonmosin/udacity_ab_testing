@@ -18,13 +18,13 @@ def p_multitest(pvals, method='holm'):
     supported_methods = ('holm', 'bonferroni')
     
     if method == 'holm':
-        return holm_correct(pvals)
+        return _holm_correct(pvals)
     elif method == 'bonferroni':
-        return bonferroni_correct(pvals)
+        return _bonferroni_correct(pvals)
     else:
         raise ValueError(f"Unknown method {method}, must be one of {','.join(supported_methods)}")
 
-def holm_correct(pvals):
+def _holm_correct(pvals):
     """Implementation of Holm-Bonferroni correction.
     References:
     [1] http://www-stat.wharton.upenn.edu/~steele/Courses/956/ResourceDetails/MultipleComparision/Writght92.pdf
@@ -49,7 +49,7 @@ def holm_correct(pvals):
                 
     return p_map
 
-def bonferroni_correct(pvals):
+def _bonferroni_correct(pvals):
     """Assumes equal alocation of test size alpha.
     [1] http://www-stat.wharton.upenn.edu/~steele/Courses/956/ResourceDetails/MultipleComparision/Writght92.pdf
     """
