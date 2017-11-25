@@ -34,8 +34,8 @@ def _benj_hochberg_correct(pvals):
     pvals_adjust = np.empty(shape=len(pvals))
     m = len(pvals)
 
-    for k in range(m):
-        pvals_adjust[k] = min(pvals_sorted[k] * m / (k + 1), 1)
+    for k, pval in enumerate(pvals_sorted):
+        pvals_adjust[k] = min(pval * m / (k + 1), 1)
 
     p_map = dict()
     for p in range(m):
@@ -52,8 +52,8 @@ def _holm_correct(pvals):
     pvals_adjust = np.empty(shape=len(pvals))
     m = len(pvals)
 
-    for k in range(m):
-        pvals_adjust[k] = min(pvals_sorted[k] * (m + 1 - (k + 1)), 1)
+    for k, pval in enumerate(pvals_sorted):
+        pvals_adjust[k] = min(pval * (m + 1 - (k + 1)), 1)
     
     # ensure that highest adjusted p-value is chosen for duplcate p-values
     if len(pvals_adjust) > 1: 
