@@ -15,7 +15,7 @@ def p_multitest(pvals, method='holm'):
     ----------
     p_map: dict of float, holds original and adjusted p-values
     """
-    supported_methods = ('holm', 'bonferroni')
+    supported_methods = ('holm', 'bonferroni', 'fdr')
     
     if method == 'holm':
         return _holm_correct(pvals)
