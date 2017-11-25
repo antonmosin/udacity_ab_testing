@@ -21,8 +21,27 @@ def p_multitest(pvals, method='holm'):
         return _holm_correct(pvals)
     elif method == 'bonferroni':
         return _bonferroni_correct(pvals)
+    elif method == 'fdr':
+        return _benj_hochberg_correct(pvals)
     else:
-        raise ValueError(f"Unknown method {method}, must be one of {','.join(supported_methods)}")
+        raise ValueError(f"Unknown method {method}, must be one of {', '.join(supported_methods)}")
+
+def _benj_hochberg_correct(pvals):
+    """Implementation of Benjamini–Hochberg aka "False Discrovery Rate" correction.
+    http://www.math.tau.ac.il/~ybenja/MyPapers/benjamini_hochberg1995.pdf
+    """
+    pvals_sorted = np.sort(pvals)
+    pvals_adjust = np.empty(shape=len(pvals))
+    m = len(pvals)
+
+    for k in range(m):
+        pvals_adjust[k] = min(pvals_sorted[k] * m / (k + 1), 1)
+
+    p_map = dict()
+    for p in range(m):
+        p_map[pvals_sorted[p]] = pvals_adjust[p]
+
+    return p_map
 
 def _holm_correct(pvals):
     """Implementation of Holm-Bonferroni correction.
